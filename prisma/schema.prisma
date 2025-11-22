@@ -5,10 +5,51 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/prisma"
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
+}
+
+model Users {
+    id        Int      @id @default(autoincrement())
+    name      String
+    hash      String
+    createdAt DateTime @default(now())
+
+    files   Files[]
+    folders Folders[]
+}
+
+model Files {
+    id        String   @id @default(uuid())
+    name      String
+    size      Int
+    url       String
+    createdAt DateTime @default(now())
+
+    users     Users?   @relation(fields: [usersId], references: [id])
+    usersId   Int?
+    folders   Folders? @relation(fields: [foldersId], references: [id])
+    foldersId String?
+}
+
+model Folders {
+    id        String   @id @default(uuid())
+    name      String
+    createdAt DateTime @default(now())
+
+    files Files[]
+
+    users   Users? @relation(fields: [usersId], references: [id])
+    usersId Int?
+}
+
+model Session {
+    id        String   @id
+    sid       String   @unique
+    data      String
+    expiresAt DateTime
 }
