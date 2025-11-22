@@ -18,9 +18,17 @@
     </header>
     <main>
       <h1>Welcome, <%= user.name %></h1>
+      <div class="files">
+        <% files.forEach((file) => { %>
+        <div class="file">
+          <a href="/file/<%= file.id %>"><%= file.name %></a>
+        </div>
+        <% }) %>
+      </div>
       <a href="/file/new">Upload a file</a>
     </main>
     <% } else { %>
+    <!-- Code that should never be seen because user should be redirected to /signup instantly -->
     <header>
       <nav>
         <a href="/"> <%= title %> </a>

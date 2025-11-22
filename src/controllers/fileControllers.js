@@ -18,7 +18,7 @@ const newFilePost = async (req, res, next) => {
 
         try {
             const fileBuffer = req.file.buffer;
-            const uniqueFileName = `${Date.now()}_${req.file.originalname}`;
+            const uniqueFileName = `${req.user.id}/${Date.now()}_${req.file.originalname}`;
 
             const { data, error: uploadError } = await supabaseClient.storage
                 .from(process.env.SUPABASE_BUCKET_NAME)
@@ -31,7 +31,9 @@ const newFilePost = async (req, res, next) => {
                 return next(uploadError);
             }
 
-            const { data: { publicUrl } } = supabaseClient.storage
+            const {
+                data: { publicUrl },
+            } = supabaseClient.storage
                 .from(process.env.SUPABASE_BUCKET_NAME)
                 .getPublicUrl(data.path);
 
