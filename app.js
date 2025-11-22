@@ -4,6 +4,7 @@ const session = require("express-session");
 const prisma = require("./src/db/prisma");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const path = require("path");
+const passport = require("./src/auth/passport");
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,8 @@ app.use(
         }),
     }),
 );
+
+app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, "public")));
 
