@@ -6,7 +6,6 @@
     <title><%= title %></title>
   </head>
   <body>
-    <% if (user) { %>
     <header>
       <nav>
         <a href="/"><%= title %></a>
@@ -17,19 +16,11 @@
       </nav>
     </header>
     <main>
-      <h1>Welcome, <%= user.name %></h1>
-      <a href="/file/new">Upload a file</a>
+      <form action="/file/new" method="POST" enctype="multipart/form-data">
+        <label for="upload">Upload Files</label>
+        <input type="file" name="upload" multiple required />
+        <button type="submit">Upload</button>
+      </form>
     </main>
-    <% } else { %>
-    <header>
-      <nav>
-        <a href="/"> <%= title %> </a>
-        <div class="links">
-          <a href="/signup">Sign Up</a>
-          <a href="/login">Login</a>
-        </div>
-      </nav>
-    </header>
-    <% } %>
   </body>
 </html>

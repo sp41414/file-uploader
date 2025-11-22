@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const session = require("express-session");
 const prisma = require("./src/db/prisma");
@@ -7,10 +8,12 @@ const path = require("path");
 const passport = require("./src/auth/passport");
 const pageRoutes = require("./src/routers/pageRoutes");
 const authRoutes = require("./src/routers/authRoutes");
+const fileRoutes = require("./src/routers/fileRoutes");
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(
     session({
@@ -37,6 +40,7 @@ app.set("view engine", "ejs");
 
 app.use("/", pageRoutes);
 app.use("/", authRoutes);
+app.use("/", fileRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (err) => {

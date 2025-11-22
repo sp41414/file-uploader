@@ -17,8 +17,14 @@ const homePageGet = async (req, res, next) => {
     });
 };
 
+const newFileGet = (req, res) => {
+    if (!req.user) return res.redirect("/login");
+    return res.render("newFile", { title: "Upload Files" });
+};
+
 module.exports = {
     loginGet,
     signUpGet,
     homePageGet,
+    newFileGet,
 };
