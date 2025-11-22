@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-        <%= title %>
-    </title>
-</head>
+    <title><%= title %></title>
+  </head>
 
-<body>
-    <nav>
-        <a href="/">
-            <%= title %>
-        </a>
+  <body>
+    <header>
+      <nav>
+        <a href="/"> <%= title %> </a>
         <div class="links">
-            <a href="/signup">Sign Up</a>
-            <a href="/login">Login</a>
+          <a href="/signup">Sign Up</a>
+          <a href="/login">Login</a>
         </div>
-    </nav>
+      </nav>
+    </header>
     <main>
-        <%- include('errors.ejs') %>
-            <form action="/signup" method="POST">
-                <label for="username">Username</label>
-                <input type="text" name="username" placeholder="Username" required />
-                <label for="password">Password</label>
-                <input type="password" name="password" placeholder="Password" required />
-                <button type="submit">Sign Up</button>
-                <a href="/login">Login</a>
-            </form>
+      <%- include('errors.ejs') %>
+      <form action="/signup" method="POST">
+        <label for="username">Username</label>
+        <input type="text" name="username" placeholder="Username" required />
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Sign Up</button>
+        <a href="/login">Login</a>
+      </form>
     </main>
-</body>
-
+  </body>
 </html>
