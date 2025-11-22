@@ -67,3 +67,7 @@ nav a {
 a:hover {
     color: var(--link-hover);
 }
+
+.muted {
+    color: var(--muted-text);
+}

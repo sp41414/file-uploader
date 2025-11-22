@@ -34,9 +34,26 @@ const newFileGet = (req, res) => {
     return res.render("newFile", { title: "Upload Files" });
 };
 
+const fileGet = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    try {
+        const file = await db.files.findFirst({
+            where: {
+                usersId: req.user.id,
+                id: req.params.id,
+            },
+        });
+        if (!file) return res.redirect("/");
+        return res.render("fileView", { title: file.name, file: file });
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     loginGet,
     signUpGet,
     homePageGet,
     newFileGet,
+    fileGet,
 };

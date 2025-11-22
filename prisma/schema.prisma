@@ -28,6 +28,7 @@ model Files {
     name      String
     size      Int
     url       String
+    path      String
     createdAt DateTime @default(now())
 
     users     Users?   @relation(fields: [usersId], references: [id])

@@ -42,6 +42,7 @@ const newFilePost = async (req, res, next) => {
                     name: req.file.originalname,
                     size: req.file.size,
                     url: publicUrl,
+                    path: data.path,
                     usersId: req.user.id,
                 },
             });
@@ -52,6 +53,31 @@ const newFilePost = async (req, res, next) => {
     });
 };
 
+const deleteFileGet = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    const fileId = req.params.id;
+    try {
+        const file = await prisma.files.findFirst({
+            where: {
+                id: fileId,
+            },
+        });
+        const { data, error } = await supabaseClient.storage
+            .from(process.env.SUPABASE_BUCKET_NAME)
+            .remove([file.path]);
+        if (error) next(error);
+        await prisma.files.delete({
+            where: {
+                id: fileId,
+            },
+        });
+        return res.redirect("/");
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     newFilePost,
+    deleteFileGet,
 };

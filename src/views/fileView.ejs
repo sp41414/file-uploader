@@ -16,6 +16,20 @@
         </div>
       </nav>
     </header>
-    <main></main>
+    <main>
+      <h1><%= title %></h1>
+      <section class="file-info">
+        <p class="muted"><%= file.createdAt %></p>
+        <p class="muted">
+          <%= (() => { let bytes = file.size; let units = ["B", "KB", "MB",
+          "GB"]; let i; for (i = 0; i < units.length - 1 && bytes >= 1024; i++)
+          { bytes /= 1024; } return bytes.toFixed(2) + " " + units[i]; })() %>
+        </p>
+      </section>
+      <section class="opts">
+        <a href='<%= file.url + "?download" %>'>Download</a>
+        <a href="/file/delete/<%= file.id %>" class="delete">Delete</a>
+      </section>
+    </main>
   </body>
 </html>
