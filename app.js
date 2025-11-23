@@ -42,6 +42,17 @@ app.use("/", pageRoutes);
 app.use("/", authRoutes);
 app.use("/", fileRoutes);
 
+app.use((req, res, next) => {
+    res.status(404).send("<h1>404 Not Found</h1>");
+});
+
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(err.status || 500).send(
+        '<h1>Internal Server Error</h1> <a href="/">Go Back</a>',
+    );
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (err) => {
     if (err) throw err;

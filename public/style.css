@@ -272,3 +272,48 @@ form label {
 .small {
   font-size: 0.5rem;
 }
+
+.file-input {
+  background-color: var(--secondary-bg);
+  padding: 0.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+  color: var(--muted-text);
+  cursor: pointer;
+  transition: transform 0.3s, border 0.3s;
+}
+
+.file-input::file-selector-button {
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.8rem;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.file-input::file-selector-button:hover {
+  background-color: var(--button-hover);
+}
+
+.file-input:focus {
+  border: 1px solid var(--accent-color);
+  transform: scale(1.05);
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .opts,
+  .opts-file {
+    align-items: center;
+    justify-content: center;
+    /* just in case the phone is too small...? */
+    flex-direction: column;
+    /* i was going to go for flex-direction: row initially.. */
+  }
+}

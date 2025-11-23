@@ -20,10 +20,21 @@ const validateUser = [
         ),
 ];
 
-const loginPost = passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login-fail",
-});
+const loginPost = (req, res, next) => {
+    passport.authenticate("local", (err, user) => {
+        if (err) return next(err);
+        if (!user)
+            return res.render("login", {
+                title: "Login",
+                errors: [{ msg: "Invalid credentials" }],
+            });
+        req.logIn(user, (err) => {
+            if (err) return next(err);
+            return res.redirect("/");
+        });
+    })(req, res, next);
+};
+
 const signUpPost = [
     validateUser,
     async (req, res, next) => {
