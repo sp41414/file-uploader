@@ -142,10 +142,58 @@ const newNestedFilePost = async (req, res, next) => {
     });
 };
 
+const deleteFolderGet = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    try {
+        // recursively delete everything within a folder (i hate recursion aaaaa)
+        let paths = [];
+        let queue = [req.params.id];
+
+        while (queue.length > 0) {
+            const currentId = queue.pop();
+            const folder = await prisma.folders.findUnique({
+                where: {
+                    id: currentId,
+                    usersId: req.user.id,
+                },
+                include: {
+                    files: true,
+                    children: true,
+                },
+            });
+            if (folder) {
+                // delete the files and push the path for supabase delete
+                folder.files.forEach((file) => {
+                    paths.push(file.path);
+                });
+                // delete the files within the children folder recursively
+                folder.children.forEach((child) => {
+                    queue.push(child.id);
+                });
+            }
+        }
+
+        if (paths.length > 0) {
+            await supabaseClient.storage
+                .from(process.env.SUPABASE_BUCKET_NAME)
+                .remove(paths);
+        }
+        // then finally delete the folders, within the folder it has onDelete: Cascade so
+        await prisma.folders.delete({
+            where: { id: req.params.id },
+        });
+
+        res.redirect("/");
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     newFilePost,
     deleteFileGet,
     newFolderPost,
     newNestedFolderPost,
     newNestedFilePost,
+    deleteFolderGet,
 };

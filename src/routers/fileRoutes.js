@@ -7,5 +7,6 @@ fileRouter.get("/file/delete/:id", fileController.deleteFileGet);
 fileRouter.post("/folder/new", fileController.newFolderPost);
 fileRouter.post("/folder/new/:id", fileController.newNestedFolderPost);
 fileRouter.post("/file/new/:id", fileController.newNestedFilePost);
+fileRouter.get("/folder/delete/:id", fileController.deleteFolderGet);
 
 module.exports = fileRouter;

@@ -23,6 +23,7 @@
         <% folders.forEach((folder) => { %>
         <div class="folder">
           <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
+          <a href="/folder/delete/<%= folder.id%>">Delete</a>
         </div>
         <% }) %>
       </section>
