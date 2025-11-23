@@ -11,5 +11,7 @@ pageRouter.get("/folder/new", pageControllers.newFolderGet);
 pageRouter.get("/folder/:id", pageControllers.folderGet);
 pageRouter.get("/folder/new/:id", pageControllers.newNestedFolderGet);
 pageRouter.get("/file/new/:id", pageControllers.newNestedFileGet);
+pageRouter.get("/file/update/:id", pageControllers.updateFileGet);
+pageRouter.get("/folder/update/:id", pageControllers.updateFolderGet);
 
 module.exports = pageRouter;

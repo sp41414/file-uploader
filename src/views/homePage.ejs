@@ -24,6 +24,7 @@
         <div class="folder">
           <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
           <a href="/folder/delete/<%= folder.id%>">Delete</a>
+          <a href="/folder/update/<%=folder.id%>">Update</a>
         </div>
         <% }) %>
       </section>
@@ -31,6 +32,8 @@
         <% files.forEach((file) => { %>
         <div class="file">
           <a href="/file/<%= file.id %>"><%= file.name %></a>
+          <a href="/file/delete/<%=file.id%>">Delete</a>
+          <a href="/file/update/<%=file.id%>">Update</a>
         </div>
         <% }) %>
       </section>

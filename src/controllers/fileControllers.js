@@ -189,6 +189,62 @@ const deleteFolderGet = async (req, res, next) => {
     }
 };
 
+const updateFilePost = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    const fileId = req.params.id;
+    try {
+        const file = await prisma.files.findUnique({
+            where: { id: req.params.id, usersId: req.user.id },
+        });
+        if (!file) return res.redirect("/");
+
+        // first update the supabase
+        const newPath = file.path.replace(file.name, req.body.rename);
+
+        const { error } = await supabaseClient.storage
+            .from(process.env.SUPABASE_BUCKET_NAME)
+            .move(file.path, newPath);
+
+        if (error) {
+            return next(error);
+        }
+
+        // then update database (with new path)
+        await prisma.files.update({
+            where: {
+                id: fileId,
+                usersId: req.user.id,
+            },
+            data: {
+                name: req.body.rename,
+                path: newPath,
+            },
+        });
+        return res.redirect("/");
+    } catch (err) {
+        next(err);
+    }
+};
+
+const updateFolderPost = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    const folderId = req.params.id;
+    try {
+        // first update the database
+        await prisma.folders.update({
+            where: {
+                id: folderId,
+                usersId: req.user.id,
+            },
+            data: {
+                name: req.body.rename,
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     newFilePost,
     deleteFileGet,
@@ -196,4 +252,6 @@ module.exports = {
     newNestedFolderPost,
     newNestedFilePost,
     deleteFolderGet,
+    updateFolderPost,
+    updateFilePost,
 };

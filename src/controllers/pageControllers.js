@@ -127,6 +127,21 @@ const newNestedFileGet = async (req, res, next) => {
         next(err);
     }
 };
+const updateFileGet = (req, res) => {
+    if (!req.user) return res.redirect("/");
+    return res.render("updateFile", {
+        title: "Update File",
+        id: req.params.id,
+    });
+};
+
+const updateFolderGet = (req, res) => {
+    if (!req.user) return res.redirect("/");
+    return res.render("updateFolder", {
+        title: "Update Folder",
+        id: req.params.id,
+    });
+};
 
 module.exports = {
     loginGet,
@@ -138,4 +153,6 @@ module.exports = {
     folderGet,
     newNestedFolderGet,
     newNestedFileGet,
+    updateFileGet,
+    updateFolderGet,
 };
