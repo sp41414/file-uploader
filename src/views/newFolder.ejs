@@ -17,11 +17,19 @@
       </nav>
     </header>
     <main>
+      <% if (folder) { %>
+      <form action="/folder/new/<%=folder.id%>" method="POST">
+        <label for="folder">Folder Name</label>
+        <input type="text" name="folder" required />
+        <button type="submit">Create</button>
+      </form>
+      <% } else { %>
       <form action="/folder/new/" method="POST">
         <label for="folder">Folder Name</label>
         <input type="text" name="folder" required />
         <button type="submit">Create</button>
       </form>
+      <% } %>
     </main>
   </body>
 </html>

@@ -17,12 +17,23 @@
       </nav>
     </header>
     <main>
+      <section class="folders">
+        <% folders.forEach((folder) => { %>
+        <div class="folder">
+          <a href="/folder/<%=folder.id%>"><%= folder.name %></a>
+        </div>
+        <% }) %>
+      </section>
       <section class="files">
         <% files.forEach((file) => { %>
         <div class="file">
           <a href="/file/<%= file.id %>"><%= file.name %></a>
         </div>
         <% }) %>
+      </section>
+      <section class="opts">
+        <a href="/file/new/<%= folder.id %>">Upload a file</a>
+        <a href="/folder/new/<%= folder.id %>">Upload a folder</a>
       </section>
     </main>
   </body>

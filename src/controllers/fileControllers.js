@@ -8,13 +8,7 @@ const newFilePost = async (req, res, next) => {
             console.error(err);
             return next(err);
         }
-        if (!req.file) {
-            // shouldn't happen since it is required, but yeah
-            return res.redirect("/");
-        }
-        if (!req.user) {
-            return res.redirect("/");
-        }
+        if (!req.file || !req.user) return res.redirect("/");
 
         try {
             const fileBuffer = req.file.buffer;
@@ -93,8 +87,65 @@ const newFolderPost = async (req, res, next) => {
     }
 };
 
+const newNestedFolderPost = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    try {
+        await prisma.folders.create({
+            data: {
+                name: req.body.folder,
+                usersId: req.user.id,
+                parentId: req.params.id,
+            },
+        });
+        return res.redirect(`/folder/${req.params.id}`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const newNestedFilePost = async (req, res, next) => {
+    multer(req, res, async (err) => {
+        if (err) return next(err);
+        if (!req.file || !req.user) return res.redirect("/");
+
+        try {
+            const uniqueFileName = `${req.user.id}/${Date.now()}_${req.file.originalname}`;
+
+            const { data, error } = await supabaseClient.storage
+                .from(process.env.SUPABASE_BUCKET_NAME)
+                .upload(uniqueFileName, req.file.buffer, {
+                    contentType: req.file.mimetype,
+                });
+
+            if (error) return next(error);
+
+            const {
+                data: { publicUrl },
+            } = supabaseClient.storage
+                .from(process.env.SUPABASE_BUCKET_NAME)
+                .getPublicUrl(data.path);
+
+            await prisma.files.create({
+                data: {
+                    name: req.file.originalname,
+                    size: req.file.size,
+                    url: publicUrl,
+                    path: data.path,
+                    usersId: req.user.id,
+                    foldersId: req.params.id,
+                },
+            });
+            res.redirect(`/folder/${req.params.id}`);
+        } catch (err) {
+            next(err);
+        }
+    });
+};
+
 module.exports = {
     newFilePost,
     deleteFileGet,
     newFolderPost,
+    newNestedFolderPost,
+    newNestedFilePost,
 };

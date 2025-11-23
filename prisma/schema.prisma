@@ -44,6 +44,11 @@ model Folders {
 
     files Files[]
 
+    // nested folders
+    children Folders[] @relation("FolderStructure")
+    parent   Folders?  @relation("FolderStructure", fields: [parentId], references: [id])
+    parentId String?
+
     users   Users? @relation(fields: [usersId], references: [id])
     usersId Int?
 }

@@ -17,11 +17,23 @@
       </nav>
     </header>
     <main>
-      <form action="/file/new" method="POST" enctype="multipart/form-data">
-        <label for="file">Upload Files</label>
+      <% if (folder) { %>
+      <form
+        action="/file/new/<%=folder.id%>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label for="file">Upload File</label>
         <input type="file" name="file" required />
         <button type="submit">Upload</button>
       </form>
+      <% } else { %>
+      <form action="/file/new" method="POST" enctype="multipart/form-data">
+        <label for="file">Upload File</label>
+        <input type="file" name="file" required />
+        <button type="submit">Upload</button>
+      </form>
+      <%} %>
     </main>
   </body>
 </html>
