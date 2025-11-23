@@ -240,6 +240,7 @@ const updateFolderPost = async (req, res, next) => {
                 name: req.body.rename,
             },
         });
+        return res.redirect("/");
     } catch (err) {
         next(err);
     }

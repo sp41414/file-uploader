@@ -7,8 +7,8 @@
   --accent-hover: oklch(39.8% 0.07 227.392);
   --accent-secondary: oklch(50% 0.18 151.711);
   --accent-secondary-hover: oklch(40% 0.18 151.711);
-  --warning-color: oklch(76.9% 0.188 70.08);
   --danger-color: oklch(63.7% 0.237 25.331);
+  --danger-hover: oklch(57.7% 0.245 27.325);
   --button-color: oklch(35% 0.03 264);
   --button-hover: oklch(45% 0.03 264);
   --link-color: oklch(74% 0.238 322.16);
@@ -169,20 +169,106 @@ main h1 {
 .folder-options {
   background-color: var(--accent-secondary-hover);
 }
-.opts {
+
+.opts,
+.opts-file {
   display: flex;
   gap: 1rem;
   align-items: center;
+  margin-top: 1rem;
 }
 
-.opts a {
-  padding: 0.5rem 0.75rem;
-  border-radius: 1.5rem;
-  background-color: var(--button-color);
+.opts-file {
+  justify-content: center;
+}
+
+.opts a,
+.opts-file a {
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
   color: var(--text-color);
   text-decoration: none;
+  font-weight: 600;
   transition: background-color 0.3s;
 }
-.opts a:hover {
+.button {
+  background-color: var(--button-color);
+}
+
+.button:hover {
   background-color: var(--button-hover);
+}
+.delete {
+  background-color: var(--danger-color);
+}
+
+.delete:hover {
+  background-color: var(--danger-hover);
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.time {
+  display: flex;
+  gap: 1rem;
+}
+.errors {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem;
+  list-style: none;
+  color: var(--danger-color);
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+form button {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  transition: background-color 0.3s;
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+form button:hover {
+  background-color: var(--button-hover);
+  cursor: pointer;
+}
+
+form input[type="text"],
+form input[type="password"] {
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  background-color: var(--button-color);
+  transition: border 0.3s, transform 0.3s;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+  border: 1px solid var(--accent-color);
+  transform: scale(1.05);
+}
+
+form label {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.small {
+  font-size: 0.5rem;
 }

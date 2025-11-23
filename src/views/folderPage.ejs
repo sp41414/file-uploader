@@ -19,22 +19,48 @@
     <main>
       <section class="folders">
         <% folders.forEach((folder) => { %>
-        <div class="folder">
-          <a href="/folder/<%=folder.id%>"><%= folder.name %></a>
-          <a href="/folder/delete/<%= folder.id %>">Delete</a>
+        <div
+          class="folder"
+          onclick="window.location.href='/folder/<%= folder.id %>';"
+        >
+          <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
+          <div class="dropdown">
+            <div class="folder-options">
+              <div class="folder-option">
+                <a href="/folder/delete/<%= folder.id%>">Delete</a>
+              </div>
+              <div class="folder-option">
+                <a href="/folder/update/<%=folder.id%>">Update</a>
+              </div>
+            </div>
+          </div>
         </div>
         <% }) %>
       </section>
       <section class="files">
         <% files.forEach((file) => { %>
-        <div class="file">
+        <div
+          class="file"
+          onclick="window.location.href='/file/<%= file.id %>';"
+        >
           <a href="/file/<%= file.id %>"><%= file.name %></a>
+          <div class="dropdown">
+            <div class="file-options">
+              <div class="file-option">
+                <a href="/file/delete/<%= file.id %>">Delete</a>
+              </div>
+              <div class="file-option">
+                <a href="/file/update/<%=file.id %>">Update</a>
+              </div>
+            </div>
+          </div>
         </div>
         <% }) %>
       </section>
       <section class="opts">
-        <a href="/file/new/<%= folder.id %>">Upload a file</a>
-        <a href="/folder/new/<%= folder.id %>">Upload a folder</a>
+        <a href="/file/new/<%= folder.id %>" class="button">Upload a file</a>
+        <a href="/folder/new/<%= folder.id %>" class="button">Create Folder</a>
+        <a href="/folder/update/<%=folder.id%>" class="button">Rename Folder</a>
       </section>
     </main>
   </body>
