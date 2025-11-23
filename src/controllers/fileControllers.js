@@ -3,98 +3,98 @@ const supabaseClient = require("../storage/supabaseClient");
 const multer = require("../storage/multerConfig");
 
 const newFilePost = async (req, res, next) => {
-  multer(req, res, async (err) => {
-    if (err) {
-      console.error(err);
-      return next(err);
-    }
-    if (!req.file) {
-      // shouldn't happen since it is required, but yeah
-      return res.redirect("/");
-    }
-    if (!req.user) {
-      return res.redirect("/");
-    }
+    multer(req, res, async (err) => {
+        if (err) {
+            console.error(err);
+            return next(err);
+        }
+        if (!req.file) {
+            // shouldn't happen since it is required, but yeah
+            return res.redirect("/");
+        }
+        if (!req.user) {
+            return res.redirect("/");
+        }
 
-    try {
-      const fileBuffer = req.file.buffer;
-      const uniqueFileName = `${req.user.id}/${Date.now()}_${
-        req.file.originalname
-      }`;
+        try {
+            const fileBuffer = req.file.buffer;
+            const uniqueFileName = `${req.user.id}/${Date.now()}_${req.file.originalname
+                }`;
 
-      const { data, error: uploadError } = await supabaseClient.storage
-        .from(process.env.SUPABASE_BUCKET_NAME)
-        .upload(uniqueFileName, fileBuffer, {
-          contentType: req.file.mimetype,
-          upsert: false,
-        });
+            const { data, error: uploadError } = await supabaseClient.storage
+                .from(process.env.SUPABASE_BUCKET_NAME)
+                .upload(uniqueFileName, fileBuffer, {
+                    contentType: req.file.mimetype,
+                    upsert: false,
+                });
 
-      if (uploadError) {
-        return next(uploadError);
-      }
+            if (uploadError) {
+                return next(uploadError);
+            }
 
-      const {
-        data: { publicUrl },
-      } = supabaseClient.storage
-        .from(process.env.SUPABASE_BUCKET_NAME)
-        .getPublicUrl(data.path);
+            const {
+                data: { publicUrl },
+            } = supabaseClient.storage
+                .from(process.env.SUPABASE_BUCKET_NAME)
+                .getPublicUrl(data.path);
 
-      await prisma.files.create({
-        data: {
-          name: req.file.originalname,
-          size: req.file.size,
-          url: publicUrl,
-          path: data.path,
-          usersId: req.user.id,
-        },
-      });
-      res.redirect("/");
-    } catch (err) {
-      return next(err);
-    }
-  });
+            await prisma.files.create({
+                data: {
+                    name: req.file.originalname,
+                    size: req.file.size,
+                    url: publicUrl,
+                    path: data.path,
+                    usersId: req.user.id,
+                },
+            });
+            res.redirect("/");
+        } catch (err) {
+            return next(err);
+        }
+    });
 };
 
 const deleteFileGet = async (req, res, next) => {
-  if (!req.user) return res.redirect("/");
-  const fileId = req.params.id;
-  try {
-    const file = await prisma.files.findFirst({
-      where: {
-        id: fileId,
-      },
-    });
-    const { data, error } = await supabaseClient.storage
-      .from(process.env.SUPABASE_BUCKET_NAME)
-      .remove([file.path]);
-    if (error) next(error);
-    await prisma.files.delete({
-      where: {
-        id: fileId,
-      },
-    });
-    return res.redirect("/");
-  } catch (err) {
-    next(err);
-  }
+    if (!req.user) return res.redirect("/");
+    const fileId = req.params.id;
+    try {
+        const file = await prisma.files.findFirst({
+            where: {
+                id: fileId,
+            },
+        });
+        const { data, error } = await supabaseClient.storage
+            .from(process.env.SUPABASE_BUCKET_NAME)
+            .remove([file.path]);
+        if (error) next(error);
+        await prisma.files.delete({
+            where: {
+                id: fileId,
+            },
+        });
+        return res.redirect("/");
+    } catch (err) {
+        next(err);
+    }
 };
 
 const newFolderPost = async (req, res, next) => {
-  if (!req.user) return res.redirect("/");
-  try {
-    await prisma.folders.create({
-      data: {
-        name: req.body.folder,
-      },
-    });
-    return res.redirect("/");
-  } catch (err) {
-    next(err);
-  }
+    if (!req.user) return res.redirect("/");
+    try {
+        await prisma.folders.create({
+            data: {
+                name: req.body.folder,
+                usersId: req.user.id,
+            },
+        });
+        return res.redirect("/");
+    } catch (err) {
+        next(err);
+    }
 };
 
 module.exports = {
-  newFilePost,
-  deleteFileGet,
-  newFolderPost,
+    newFilePost,
+    deleteFileGet,
+    newFolderPost,
 };

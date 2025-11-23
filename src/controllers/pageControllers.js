@@ -1,3 +1,4 @@
+// inconsistent naming but i forgot so i guess this is here
 const db = require("../db/prisma");
 
 const loginGet = (req, res) => {
@@ -63,7 +64,31 @@ const newFolderGet = (req, res) => {
     });
 };
 
-const folderGet = (req, res) => { };
+const folderGet = async (req, res, next) => {
+    if (!req.user) return res.redirect("/");
+    try {
+        const folder = await db.folders.findFirst({
+            where: {
+                id: req.params.id,
+                usersId: req.user.id,
+            },
+        });
+        const files = await db.files.findMany({
+            where: {
+                foldersId: req.params.id,
+                usersId: req.user.id,
+            },
+        });
+        if (folder) {
+            return res.render("folderPage", {
+                title: folder.name,
+                files: files,
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
+};
 
 module.exports = {
     loginGet,

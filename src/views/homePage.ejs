@@ -19,20 +19,20 @@
     </header>
     <main>
       <h1>Welcome, <%= user.name %></h1>
-      <div class="folders">
+      <section class="folders">
         <% folders.forEach((folder) => { %>
         <div class="folder">
           <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
         </div>
         <% }) %>
-      </div>
-      <div class="files">
+      </section>
+      <section class="files">
         <% files.forEach((file) => { %>
         <div class="file">
           <a href="/file/<%= file.id %>"><%= file.name %></a>
         </div>
         <% }) %>
-      </div>
+      </section>
       <a href="/file/new">Upload a file</a>
       <a href="/folder/new">Create Folder</a>
     </main>
