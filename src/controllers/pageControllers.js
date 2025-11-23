@@ -19,10 +19,16 @@ const homePageGet = async (req, res, next) => {
                 foldersId: undefined,
             },
         });
+        const folders = await db.folders.findMany({
+            where: {
+                usersId: req.user.id,
+            },
+        });
         res.render("homePage", {
             title: "File Uploader",
             user: req.user,
             files: files,
+            folders: folders,
         });
     } catch (err) {
         next(err);
@@ -50,10 +56,21 @@ const fileGet = async (req, res, next) => {
     }
 };
 
+const newFolderGet = (req, res) => {
+    if (!req.user) return res.redirect("/");
+    return res.render("newFolder", {
+        title: "Create Folder",
+    });
+};
+
+const folderGet = (req, res) => { };
+
 module.exports = {
     loginGet,
     signUpGet,
     homePageGet,
     newFileGet,
     fileGet,
+    newFolderGet,
+    folderGet,
 };

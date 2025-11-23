@@ -7,5 +7,7 @@ pageRouter.get("/login", pageControllers.loginGet);
 pageRouter.get("/signup", pageControllers.signUpGet);
 pageRouter.get("/file/new", pageControllers.newFileGet);
 pageRouter.get("/file/:id", pageControllers.fileGet);
+pageRouter.get("/folder/new", pageControllers.newFolderGet);
+pageRouter.get("/folder/:id", pageControllers.folderGet);
 
 module.exports = pageRouter;

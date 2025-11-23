@@ -19,6 +19,13 @@
     </header>
     <main>
       <h1>Welcome, <%= user.name %></h1>
+      <div class="folders">
+        <% folders.forEach((folder) => { %>
+        <div class="folder">
+          <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
+        </div>
+        <% }) %>
+      </div>
       <div class="files">
         <% files.forEach((file) => { %>
         <div class="file">
@@ -27,6 +34,7 @@
         <% }) %>
       </div>
       <a href="/file/new">Upload a file</a>
+      <a href="/folder/new">Create Folder</a>
     </main>
     <% } else { %>
     <!-- Code that should never be seen because user should be redirected to /signup instantly -->
