@@ -17,7 +17,7 @@
       </nav>
     </header>
     <main>
-      <% if (folder) { %>
+      <%- include('errors') %> <% if (folder) { %>
       <form
         action="/file/new/<%=folder.id%>"
         method="POST"

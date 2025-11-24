@@ -4,12 +4,22 @@ const multer = require("../storage/multerConfig");
 
 const newFilePost = async (req, res, next) => {
     multer(req, res, async (err) => {
+        if (err && err.code === "LIMIT_FILE_SIZE") {
+            return res.render("newFile", {
+                title: "Upload Files",
+                errors: [{ msg: "File upload limit exceeded (40 MB)" }],
+                folder: req.params.id,
+            });
+        }
         if (err) {
             console.error(err);
-            return next(err);
+            return res.render("newFile", {
+                title: "Upload Files",
+                errors: [{ msg: err.message }],
+                folder: req.params.id,
+            });
         }
         if (!req.file || !req.user) return res.redirect("/");
-
         try {
             const fileBuffer = req.file.buffer;
             const uniqueFileName = `${req.user.id}/${Date.now()}_${req.file.originalname
